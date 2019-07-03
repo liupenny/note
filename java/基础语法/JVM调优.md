@@ -81,20 +81,24 @@ jvm堆中主要的空间，就是以上新生代、老生代、永久代组成,�
 
 | 分代   | 参数                                       | 描述                                                         |
 | ------ | ------------------------------------------ | ------------------------------------------------------------ |
-| 堆大小 | -Xms                                       | 初始堆大小，默认为物理内存的1/64(<1GB)                       |
+| 堆大小 | -Xms                                       | 最小堆大小，默认为物理内存的1/64(<1GB)                       |
 |        | -Xmx                                       | 最大堆大小，默认(MaxHeapFreeRatio参数可以调整)空余堆内存大于70%时，JVM会减少堆直到 -Xms的最小限制 |
 | 新生代 | -XX:NewSize                                | 新生代空间大小初始值                                         |
 |        | -XX:MaxNewSize                             | 新生代空间大小最大值                                         |
 |        | -Xmn                                       | 新生代空间大小，此处的大小是(eden+2 survivor space)          |
-| 永久代 | -XX:PermSize                               | 永久代空间的初始值&最小值                                    |
-|        | -XX：MaxPermSize                           | 永久代空间的最大值                                           |
+| 永久代 | -XX:PermSize                               | 永久代空间的最小值                                           |
+|        | -XX:MaxPermSize                            | 永久代空间的最大值                                           |
 | 老年代 | 老年代的空间大小会根据新生代的大小隐式设定 |                                                              |
 |        | 初始值=-Xmx减去-XX:NewSize的值             |                                                              |
 |        | 最小值=-Xmx值减去-XX:MaxNewSize的值        |                                                              |
 
 在设置的时候，如果关注性能开销的话，应尽量把永久代的初始值与最大值设置为同一值，因为永久代的大小调整需要进行FullGC 才能实现。
 
-
+```
+-XX:+PrintGCDetails
+-XX:+UseConcMarkSweepGC 
+-XX:+HeapDumpOnOutOfMemoryError ：虚拟机在出现内存溢出异常时dump出当前的堆快照
+```
 
 ## 3、计算活跃数据大小
 
@@ -169,12 +173,6 @@ jvm堆中主要的空间，就是以上新生代、老生代、永久代组成,�
 java -Xms373m -Xmx373m -Xmn140m -XX:PermSize=5m -XX:MaxPermSize=5m复制代码
 ```
 
-
-
-
-
-
-
 # 四、延迟调优
 
 在确定了应用程序的活跃数据大小之后，我们需要再进行延迟性调优，因为对于此时堆内存大小，延迟性需求无法达到应用的需要，需要基于应用的情况来进行调试。
@@ -204,10 +202,6 @@ java -Xms373m -Xmx373m -Xmn140m -XX:PermSize=5m -XX:MaxPermSize=5m复制代码
 
 
 ## 2、优化新生代的大小
-
-![img](data:image/svg+xml;utf8,<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="800" height="600"></svg>)
-
-
 
 比如如上的gc日志中，我们可以看到Minor GC的平均持续时间=0.069秒，MinorGC 的频率为0.389秒一次。
 

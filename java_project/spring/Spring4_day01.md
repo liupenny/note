@@ -23,7 +23,7 @@
 ----------
 
 **需求分析**
-	
+
 	1. 使用Spring的IOC技术完成客户的保存功能
 
 ----------
@@ -49,7 +49,6 @@
 
    ![](assets/捕获.PNG)
 
-   
 
 ----------
 
@@ -67,7 +66,7 @@
 			* Spring不排斥各种优秀的开源框架，其内部提供了对各种优秀框架（如：Struts2、Hibernate、MyBatis、Quartz等）的直接支持
 		* 降低JavaEE API的使用难度
 			* Spring 对JavaEE开发中非常难用的一些API（JDBC、JavaMail、远程调用等），都提供了封装，使这些API应用难度大大降低
-	
+
 	2. Spring框架的版本
 		* Spring3.x和Spring4.x的版本
 
@@ -142,12 +141,12 @@
 ----------
 
 **入门总结之Spring框架中的工厂（了解）**
+
 	1. ApplicationContext接口
-		* 使用ApplicationContext工厂的接口，使用该接口可以获取到具体的Bean对象
-		* 该接口下有两个具体的实现类
-			* ClassPathXmlApplicationContext			-- 加载类路径下的Spring配置文件
-			* FileSystemXmlApplicationContext			-- 加载本地磁盘下的Spring配置文件
-	
+			* 使用ApplicationContext工厂的接口，使用该接口可以获取到具体的Bean对象
+			* 该接口下有两个具体的实现类
+				* ClassPathXmlApplicationContext			-- 加载类路径下的Spring配置文件
+				* FileSystemXmlApplicationContext			-- 加载本地磁盘下的Spring配置文件
 	2. BeanFactory工厂（是Spring框架早期的创建Bean对象的工厂接口）
 		* 使用BeanFactory接口也可以获取到Bean对象
 			public void run(){
@@ -166,7 +165,6 @@
 ----------
 
 **入门总结之配置Spring框架编写XML的提示**
-	
 	1. 步骤一：先复制， http://www.springframework.org/schema/beans/spring-beans.xsd	
 	2. 步骤二：搜索XML Catalog，点击Add按钮
 	3. 步骤三：先选择Location的schema的约束地址
@@ -221,10 +219,10 @@
 ----------
 
 **技术分析之Spring框架的属性注入**
+
 	1. 对于类成员变量，常用的注入方式有两种
-			* 构造函数注入
-			* 属性setter方法注入
-	
+		* 构造函数注入
+		* 属性setter方法注入
 	2. 在Spring框架中提供了前两种的属性注入的方式
 		1. 构造方法的注入方式，两步
 			* 编写Java的类，提供构造方法
@@ -272,7 +270,6 @@
 **技术分析之Spring的2.5版本中提供了一种:p名称空间的注入（了解）**
 	1. 步骤一：需要先引入 p 名称空间
 			* 在schema的名称空间中加入该行：xmlns:p="http://www.springframework.org/schema/p"
-	
 	2. 步骤二：使用p名称空间的语法
 		* p:属性名 = ""
 		* p:属性名-ref = ""
@@ -304,18 +301,18 @@
 ----------
 
 **技术分析之数组，集合(List,Set,Map)，Properties等的注入**
+
 	1. 如果是数组或者List集合，注入配置文件的方式是一样的
-		<bean id="collectionBean" class="com.itheima.demo5.CollectionBean">
-				<property name="arrs">
-					<list>
-						<value>美美</value>
-						<value>小风</value>
-						//如果放的是对象
-						<ref bean="person" ></ref>
-					</list>
-				</property>
-			</bean>
-	
+			<bean id="collectionBean" class="com.itheima.demo5.CollectionBean">
+					<property name="arrs">
+						<list>
+							<value>美美</value>
+							<value>小风</value>
+							//如果放的是对象
+							<ref bean="person" ></ref>
+						</list>
+					</property>
+				</bean>
 	2. 如果是Set集合，注入的配置文件方式如下：
 		<property name="sets">
 			<set>

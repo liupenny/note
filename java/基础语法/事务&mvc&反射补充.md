@@ -11,7 +11,7 @@
 - 技术分析:
 
 ​	mvc思想
-	事务
+​	事务
 
 ## mvc思想演变
 
@@ -45,8 +45,8 @@ servlet-->缺点:生成html内容太麻烦
 ## jsp设计模式1 model1:(了解)
 
 ​	javabean+jsp
-	javabean在model1使用(了解)-通过两种动作标签（将form.jsp中表单中的数据提交给login.jsp，生成javabean）
-	id是给javabean起的名字，class要是全限定名
+​	javabean在model1使用(了解)-通过两种动作标签（将form.jsp中表单中的数据提交给login.jsp，生成javabean）
+​	id是给javabean起的名字，class要是全限定名
 
 - form.jsp
 
@@ -265,7 +265,7 @@ servlet-->缺点:生成html内容太麻烦
 ​	mysql中事务默认是自动提交,一条sql语句就是一个事务.（所以不太好，需要关闭一条语句一个，改为多条语句一个事物）
 
 ​	扩展:
-		oracle中事务默认是手动的,必须手动提交才可以.
+​		oracle中事务默认是手动的,必须手动提交才可以.
 
 ```
  开启手动事务方式
@@ -808,7 +808,7 @@ serializable		串行化		可以避免所有的问题
 - 避免不可重复读的发生 经隔离级别设置成 可重复读
 
 ​    `set session transaction isolation level  repeatable read;`
-    这样，在一次事务中查询的结果就一样了。commit之后再查询就能看到了。
+​    这样，在一次事务中查询的结果就一样了。commit之后再查询就能看到了。
 
 - 演示串行化（只允许一个事务进行操作，只有当前事务结束后别的事务才能进来） 可以避免所有的问题
 
@@ -828,3 +828,63 @@ serializable		串行化		可以避免所有的问题
 	Connection的api
 	    void setTransactionIsolation(int level) 
 	        level是常量
+
+# 反射
+
+## 声明式编程
+
+- **命令式编程**：命令“机器”*如何*去做事情*(how)*，这样不管你想要的*是什么(what)*，它都会按照你的命令实现。
+- **声明式编程**：告诉“机器”你想要的*是什么(what)*，让机器想出*如何*去做*(how)*。
+
+### 声明式编程和命令式编程的代码例子
+
+举个简单的例子，假设我们想让一个数组里的数值翻倍。
+
+我们用命令式编程风格实现，像下面这样：
+
+```
+var numbers = [1,2,3,4,5]
+
+var doubled = []
+
+for(var i = 0; i < numbers.length; i++) {
+
+  var newNumber = numbers[i] * 2
+  doubled.push(newNumber)
+
+}
+console.log(doubled) //=> [2,4,6,8,10]
+```
+
+我们直接遍历整个数组，取出每个元素，乘以二，然后把翻倍后的值放入新数组，每次都要操作这个*双倍数组*，直到计算完所有元素。
+
+而使用声明式编程方法，我们可以用 `Array.map` 函数，像下面这样：
+
+```
+var numbers = [1,2,3,4,5]
+
+var doubled = numbers.map(function(n) {
+
+  return n * 2
+})
+console.log(doubled) //=> [2,4,6,8,10]
+```
+
+`map` 利用当前的数组创建了一个新数组，新数组里的每个元素都是经过了传入`map`的函数(这里是`function(n) { return n*2 }`)的处理。
+
+`map`函数所作的事情是将直接遍历整个数组的过程归纳抽离出来，让我们专注于描述我们想要的*是什么(what)*。注意，我们传入map的是一个纯函数；它不具有任何副作用(不会改变外部状态)，它只是接收一个数字，返回乘以二后的值。
+
+## 基本原理
+
+解决的问题：使用声明的方式来编程 、 可以在运行时修改类(比如：在函数调用前后加日志、函数加事务、权限控制)
+
+举例：
+
+- web编程里，给所有以add开头的方法添加日志
+
+- web后台，给以service结尾的类添加事务
+
+  使用AOP就能读取xml文件的声明，进一步修改方法
+
+
+

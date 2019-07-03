@@ -1,0 +1,5 @@
+node_modules/*
+.idea/
+
+big_data/
+byte_beat/
