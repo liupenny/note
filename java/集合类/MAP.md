@@ -682,30 +682,35 @@ final V replaceNode(Object key, V value, Object cv) {
 
 ConcurrentHashMap通过size方法来获得table中的记录数量
 
-```
-    public int size() {
-        long n = sumCount();
-        return ((n < 0L) ? 0 :
-                (n > (long)Integer.MAX_VALUE) ? Integer.MAX_VALUE :
-                (int)n);
-    }
+```java
+public int size() {
+    long n = sumCount();
+    return ((n < 0L) ? 0 :
+            (n > (long)Integer.MAX_VALUE) ? Integer.MAX_VALUE :
+            (int)n);
+}
 
 
-    final long sumCount() {
-        CounterCell[] as = counterCells; CounterCell a;
-        long sum = baseCount;
-        if (as != null) {
-            for (int i = 0; i < as.length; ++i) {
-                if ((a = as[i]) != null)
-                    sum += a.value;
-            }
+final long sumCount() {
+    // 部分元素变化的个数保存在此数组中
+    CounterCell[] as = counterCells; CounterCell a;
+    //记录的元素个数
+    long sum = baseCount;
+    if (as != null) {
+        for (int i = 0; i < as.length; ++i) {
+            if ((a = as[i]) != null)
+                sum += a.value;
         }
-        return sum;
     }
-    
+    return sum;
+}
 ```
 
 ConcurrentHashMap的记录数量需要结合baseCount和counterCells数组来得到，通过累计两者的数量即可获得当前ConcurrentHashMap中的记录总量。
+
+在put方法结尾调用了addCount方法，使用unsafe的CAS操作给当前ConcurrentHashMap的元素个数baseCount+1。如果check>=0，检测是否需要扩容。
+
+counterCell这个类需要防止“伪共享”：缓存系统中是以缓存行（cache line）为单位存储的。缓存行是2的整数幂个连续字节，一般为32-256个字节。最常见的缓存行大小是64个字节。当多线程修改互相独立的变量时，如果这些变量共享同一个缓存行，就会无意中影响彼此的性能，这就是伪共享。
 
 # 8. JAVA8-HashMap
 
@@ -1226,7 +1231,7 @@ static int indexFor(int h, int length) {
 - 扩容时，新容量是原来的2倍+1。int newCapacity = (oldCapacity << 1) + 1;
 - Hashtable是Dictionary的子类同时也实现了Map接口，HashMap是Map接口的一个实现类
 
-# 9.ConcurrentHashMap(JDK7)
+# 9.JAVA1.7-ConcurrentHashMap
 
 ## 1. 实现原理
 
@@ -1448,7 +1453,23 @@ public V get(Object key) {
 
 ### 1.4 size操作
 
-size操作与put和get操作最大的区别在于，size操作需要遍历所有的Segment才能算出整个Map的大小，而put和get都只关心一个Segment。假设我们当前遍历的Segment为SA，那么在遍历SA过程中其他的Segment比如SB可能会被修改，于是这一次运算出来的size值可能并不是Map当前的真正大小。所以一个比较简单的办法就是计算Map大小的时候所有的Segment都Lock住，不能更新(包含put，remove等等)数据，计算完之后再Unlock。这是普通人能够想到的方案，但是牛逼的作者还有一个更好的Idea：先给3次机会，不lock所有的Segment，遍历所有Segment，累加各个Segment的大小得到整个Map的大小，如果某相邻的两次计算获取的所有Segment的更新的次数（每个Segment都有一个modCount变量，这个变量在Segment中的Entry被修改时会加一，通过这个值可以得到每个Segment的更新操作的次数）是一样的，说明计算过程中没有更新操作，则直接返回这个值。如果这三次不加锁的计算过程中Map的更新次数有变化，则之后的计算先对所有的Segment加锁，再遍历所有Segment计算Map大小，最后再解锁所有Segment。源代码如下：
+ConcurrentHashMap的Size方法是一个嵌套循环，大体逻辑如下：
+
+1.遍历所有的Segment。
+
+2.把Segment的元素数量累加起来。
+
+3.把Segment的修改次数累加起来。
+
+4.判断所有Segment的总修改次数是否大于上一次的总修改次数。如果大于，说明统计过程中有修改，重新统计，尝试次数+1；如果不是。说明没有修改，统计结束。
+
+5.如果尝试次数超过阈值，则对每一个Segment加锁，再重新统计。
+
+6.再次判断所有Segment的总修改次数是否大于上一次的总修改次数。由于已经加锁，次数一定和上次相等。
+
+7.释放锁，统计结束。
+
+可以看出JDK1.7的size计算方式有点像乐观锁和悲观锁的方式，为了尽量不锁住所有Segment，首先乐观地假设Size过程中不会有修改。当尝试一定次数，才无奈转为悲观锁，锁住所有Segment保证强一致性。
 
 ```
 public int size() {
