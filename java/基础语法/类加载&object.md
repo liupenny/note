@@ -278,11 +278,115 @@ Runtime 类里有一个 runFinalizersOnExit 方法，可以让程序在退出时
 
 通过getClass()方法可以得到一个和这个类有关的java.lang.Class对象。返回的Class对象是一个被static synchronized方法封装的代表这个类的对象；例如，static sychronized void foo(){}。这也是指向反射API。因为调用gerClass()的对象的类是在内存中的，保证了类型安全
 
+## clone()方法
+
+作用：返回一个Object对象的复制，是一个新的对象而不是引用
+
+方法：浅拷贝
+
+1）要实现clone的类先继承Cloneable接口，他是一个标识接口
+
+2）重新clone（）方法
+
+3）在clone方法中调用super.clone（）
+
+4）浅复制的引用指向原型对象新的克隆体
+
+```java
+class Obj implements Cloneable{
+    private int INT = 0;
+
+    public int getINT() {
+        return INT;
+    }
+
+    public void setINT(int replace) {
+        this.INT = replace;
+    }
+
+    public void changeINT() {
+        this.INT = 1;
+    }
+    @Override
+    public Object clone() {
+        Object o = null;
+        try {
+            o = (Obj)super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return o;
+    }
+}
+
+public class TestRef {
+    public static void main(String[] args) {
+        Obj a = new Obj();
+        Obj b = (Obj)a.clone();
+        b.changeINT();
+        System.out.println("a:" + a.getINT());
+        System.out.println("b:" + b.getINT());
+    }
+}
+
+运行结果：
+a:0
+b:1
+```
+
+- 深拷贝：当类中包含对象时采用。方法：对对象调用完clone方法后，对对象中的非基本类型的属性也调用clone()方法完成深拷贝
+
+```java
+import java.util.Date;
+
+class Obj implements Cloneable{
+    //private String INT = "hello";
+    private Date INT = new Date();
+
+    public Date getINT() {
+        return INT;
+    }
+
+    public void setString(Date replace) {
+        this.INT = replace;
+    }
+
+    public void changeString() {
+        this.INT.setMonth(4);
+    }
+    @Override
+    public Object clone() {
+        Object o = null;
+        try {
+            o = (Obj)super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        //深度拷贝
+        ((Obj) o).INT = (Date)this.getINT().clone();
+        return o;
+    }
+}
+
+public class TestRef {
+    public static void main(String[] args) {
+        Obj a = new Obj();
+        Obj b = (Obj)a.clone();
+        b.changeString();
+        System.out.println("a:" + a.getINT());
+        System.out.println("b:" + b.getINT());
+    }
+}
+运行结果：
+a:Tue Jul 30 13:29:40 CST 2019
+b:Thu May 30 13:29:40 CST 2019
+```
+
 ## int hashCode()
 
-hashCode()方法返回给调用者此对象的哈希码（其值由一个hash函数计算得来）。这个方法通常用在基于hash的集合类中，像java.util.HashMap,java.until.HashSet和java.util.Hashtable
+hashCode()方法返回给调用者此对象的哈希值。这个方法通常用在基于hash的集合类中，像java.util.HashMap,java.until.HashSet和java.util.Hashtable
 
-在覆盖equals()的时候同时覆盖hashCode()可以保证对象的功能兼容于hash集合。这是一个好习惯，即使这些对象不会被存储在hash集合中
+在覆盖equals()的时候同时覆盖hashCode()可以保证对象的功能兼容于hash集合。
 
 ```java
 // java.lang.String#hashcode
@@ -305,6 +409,14 @@ public int hashCode() {
 == ：比较两个变量的值是否相等。对应内存值(引用变量的地址)
 
 equals：Object类的方法，直接使用==比较。其他类会覆盖这个方法
+
+**重写equals必须重写hashcode方法吗？**
+
+保持对象在各个场合下的一致性
+
+1. 重写equals()：为了让尽管地址不同，但内容相同的对象在调用该方法时返回true
+2. 重写hashcode方法：为了让地址不同，但内容相同的对象的Hash值相同，这样存入map中能定位到相同的索引
+3. JAVA标准对hashcode有相应的规定：equals()方法相等的对象hashcode()也相等
 
 ## String toString()
 
