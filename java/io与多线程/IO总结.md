@@ -2,19 +2,21 @@
 
 ![1533818180417](assets/1533818180417.png)
 
-## 输入流：
+## 字节流：
 
-## 输出流：
+InputStream，OutputStream
 
-## 字节流：InputStream，OutputStream
+## 字符流：
 
-## 字符流：FileReader，FileWriter，BufferedReader，BufferedWriter
+FileReader，FileWriter，BufferedReader，BufferedWriter
 
 - 为了处理文字数据方便而出现的对象。这些对象的内部使用的还是字节流(因为文字最终也是字节数据)
 - 只不过，通过字节流读取了相对应的字节数，没有对这些字节直接操作。而是去查了指定的(本机默认的)编码表，获取到了对应的文字。
 - 简单说：字符流就是 ： 字节流+编码表。
 
-## 操作文件的字节流对象：FileOutputStream，FileInputStream，BufferedOutputStream，BufferedInputStream
+# 操作文件的字节流对象：
+
+FileOutputStream，FileInputStream，BufferedOutputStream，BufferedInputStream
 
 -----------------------
 
@@ -24,7 +26,7 @@
 - 缓冲区的基本思想：其实就是定义容器将数据进行临时存储。对于缓冲区对象，其实就是将这个容器进行了封装，并提供了更多高效的操作方法。
 - 是使用了一种设计思想完成。设计模式：装饰设计模式。
 
-### 缓冲区说明：先将数据写到缓冲区中，再将缓冲区中的数据一次性写到目的地。
+缓冲区说明：先将数据写到缓冲区中，再将缓冲区中的数据一次性写到目的地。
 
 Writer
 	|--TextWriter
@@ -95,9 +97,9 @@ Writer
 ### 原理；
 
 ​	1，使用流的read方法从源中读取一批数据存储到缓冲区的数组中。
-	2，通过计数器记录住存储的元素个数。
-	3，通过数组的角标来获取数组中的元素(从缓冲区中取数据).
-	4，指针会不断的自增，当增到数组长度，会归0.计数器会自减，当减到0时，就在从源拿一批数据进缓冲区。
+​	2，通过计数器记录住存储的元素个数。
+​	3，通过数组的角标来获取数组中的元素(从缓冲区中取数据).
+​	4，指针会不断的自增，当增到数组长度，会归0.计数器会自减，当减到0时，就在从源拿一批数据进缓冲区。
 
 ## 转换流：
 
@@ -128,7 +130,7 @@ OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream("b.txt"),"g
 ## 1，明确体系：
 
 ```
-	数据源：InputStream ，Reader
+	数据源：InputStream（字节），Reader
 	数据汇：OutputStream，Writer
 ```
 
@@ -353,8 +355,8 @@ BufferedOutputStream
 ### 特点：
 
 ​	1，当操作的数据是字符时，可以选择PrintWriter，比PrintStream要方便。
-	2，它的构造函数可以接收 File对象，字符串路径，字节输出流，字符输出流。
-	3，构造函数中，如果参数是输出流，那么可以通过指定另一个参数true完成自动刷新，该true对println方法有效。
+​	2，它的构造函数可以接收 File对象，字符串路径，字节输出流，字符输出流。
+​	3，构造函数中，如果参数是输出流，那么可以通过指定另一个参数true完成自动刷新，该true对println方法有效。
 
 ### 什么时候用？
 
@@ -366,8 +368,8 @@ BufferedOutputStream
 ## 特点：
 
 ​	1，将多个字节读取流和并成一个读取流，将多个源合并成一个源，操作起来方便。
-	2，需要的枚举接口可以通过Collections.enumeration(collection);
-	
+​	2，需要的枚举接口可以通过Collections.enumeration(collection);
+​	
 
 ## ObjectInputStream 和 ObjectOutputStream
 
@@ -384,11 +386,11 @@ Serializable标记接口
 ## 特点：
 
 ​	1，即可读取，又可以写入。
-	2，内部维护了一个大型的byte数组，通过对数组的操作完成读取和写入。
-	3，通过getFilePointer方法获取指针的位置，还可以通过seek方法设置指针的位置。
-	4，该对象的内容应该封装了字节输入流和字节输出流。
-	5，该对象只能操作文件。
-	6，通过seek方法操作指针，可以从这个数组中的任意位置上进行读和写
+​	2，内部维护了一个大型的byte数组，通过对数组的操作完成读取和写入。
+​	3，通过getFilePointer方法获取指针的位置，还可以通过seek方法设置指针的位置。
+​	4，该对象的内容应该封装了字节输入流和字节输出流。
+​	5，该对象只能操作文件。
+​	6，通过seek方法操作指针，可以从这个数组中的任意位置上进行读和写
 
 ​	7，可以完成对数据的修改。但是要注意：数据必须有规律。
 
@@ -404,7 +406,7 @@ PipedInputStream
 ## 用操作基本数据类型值的对象。
 
 ​	DataInputStream
-	DataOutputStream
+​	DataOutputStream
 
 
 
