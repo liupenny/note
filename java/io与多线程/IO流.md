@@ -20,22 +20,19 @@
 
 **系统有默认编码表，**所以直接读取字节进行转换。
 
-## 举例1：将一些文字存储到硬盘一个文件中。
+## 举例1：
+
+将一些文字存储到硬盘一个文件中。
 
 - 文件可能不存在，所以要抛出异常
-- 如果没有写fw.close，且忘记flush,那已经写的数据就会丢失
-- 写了close 会在关闭前自动刷新
 - close和flush的区别：flush刷新后，流还能继续用，close刷新后，流会关闭
-- 如果构造函数中加入true，可以实现对文件进行续写！否则就会覆盖原来对象
-- 想要加换行符，windows中要写fw.write("xixi\r\nhhh");
 
-```
+```java
 public static void main(String[] args) throws IOException {
 //创建一个可以往文件中写入字符数据的字符输出流对象。
 * 既然是往一个文件中写入文字数据，那么在创建对象时，就必须明确该文件(用于存储数据的目的地)。
 * 如果文件不存在，则会自动创建。
 * 如果文件存在，则会被覆盖。
-* 如果构造函数中加入true，可以实现对文件进行续写！
 */
 FileWriter fw = new FileWriter("demo.txt",true);
 
@@ -44,8 +41,7 @@ FileWriter fw = new FileWriter("demo.txt",true);
 * 其实数据写入到临时存储缓冲区中。
 */
 fw.write("abcde"+LINE_SEPARATOR+"hahaha");
-//		fw.write("xixi");
-
+    
 /*
 * 进行刷新，将数据直接写到目的地中。
 */		
@@ -62,9 +58,9 @@ fw.close();
 
 ## 举例2：异常处理
 
-要跟数据发生关系的，无论：读、写、创建都会抛出异常。
-
-文件操作一旦出现异常，一定要关闭文件，放在finally中
+- 在finally中关闭文件
+- fw定义在外面---fw定义在try里面，catch和finally就没法操作了。
+- finally中对关闭对象进行!=null判断---否则，fw没有找到文件就是null
 
 ```
 public static void main(String[] args) {
@@ -88,14 +84,13 @@ public static void main(String[] args) {
 }
 ```
 
-- fw定义在外面---fw定义在try里面，catch和finally就没法操作了。
-- finally中对关闭对象进行!=null判断---否则，fw没有找到文件就是null
+## 举例3：
 
-## 举例3：filereader:用默认编码读取
+filereader:用默认编码读取
 
 - 已到达流的末尾，会返回-1,这是因为java识别到了硬盘上的分割符
 
-### 总结：read方法到末尾返回-1，readLine返回Null
+- read方法到末尾返回-1，readLine返回Null
 
 ### 1.读字符
 
@@ -258,7 +253,7 @@ public static void main(String[] args) throws IOException {
 }
 ```
 
-#### readLine的原理：底层还是用read一次读一个，到尾返回null
+readLine的原理：底层还是用read一次读一个，到尾返回null
 
 读一行获取多个字符，其实都是**在硬盘上一个一个读取**，所以最终使用的还是read一次读一个
 
@@ -477,7 +472,6 @@ public class MyLineNumber extends MyBufferedReader{
 
 ```java
 public static void demo_read() throws IOException {
-
     //1，创建一个读取流对象。和指定文件关联。
     FileInputStream fis = new FileInputStream("bytedemo.txt");
 	
@@ -511,7 +505,6 @@ public static void demo_read() throws IOException {
 }
 
 public static void demo_write() throws IOException {
-
     //1，创建字节输出流对象。用于操作文件.
     FileOutputStream fos = new 			     FileOutputStream("bytedemo.txt");
 

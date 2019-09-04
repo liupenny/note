@@ -5,7 +5,6 @@
 ```
 1: File f1 = new File("e:\\demodir\\a.txt");  
 2: File f2 = new File("e:\\demodir","b.txt");
-
 3: File d = new File("e:\\demodir");
    File f3 = new File(d,"b.txt");
 4：File f4 = new File("b.txt");
@@ -842,7 +841,9 @@ UTF-8不同，它定义了一种“区间规则”，这种规则可以和ASCII�
 
 加入编码表以后要抛异常
 
-### 举例1：编对，解对--用同一种方法编码，解码
+### 举例1：
+
+编对，解对--用同一种方法编码，解码
 
 ```java
 String str1 = "你好";
@@ -856,7 +857,9 @@ String s1 = new String(b1,"utf-8");
 System.out.println("s1="+s1);
 ```
 
-### 举例2：编错--编码用了错误的码表，不能识别字符，编码就错了
+### 举例2：
+
+编错--编码用了错误的码表，不能识别字符，编码就错了
 
 ```java
 String str1 = "你好";
@@ -866,7 +869,9 @@ String s1 = new String(buf1,"ISO8859-1");
 System.out.println("s1="+s1);
 ```
 
-### 举例3：编对，解错--ISO8859不识别GBK,解码的时候，虽然得到的字符都是错误的。但字节码没变。重新获取字节码，进行解码即可
+### 举例3：
+
+编对，解错--ISO8859不识别GBK,解码的时候，虽然得到的字符都是错误的。但字节码没变。重新获取字节码，进行解码即可
 
 ```java
 public static void main(String[] args) throws IOException {
@@ -901,7 +906,9 @@ tomcat服务器用的是ISO8859-1(可以识别英文和拉丁文)，只能重新
 
 ![1533784521153](assets/1533784521153.png)
 
-### 举例4：编对，解错--utf-8可识别GBK,解码错误后还能拿到源字节，重新解码即可
+### 举例4：
+
+编对，解错--utf-8可识别GBK,解码错误后还能拿到源字节，重新解码即可
 
 ```java
 String str1 = "你好";
