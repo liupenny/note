@@ -2,7 +2,7 @@
 
 # 一：JAVA
 
-[JAVA汇总](./java/JAVA汇总)
+[JAVA汇总](<https://github.com/liupenny/note/blob/master/java/JAVA%E6%B1%87%E6%80%BB.md>)
 
 ## 1.io与多线程：
 

@@ -128,7 +128,7 @@ public class Main {
 - 使用new String(“”)拼接 ： String s4 = new String(“fo”)+”ur”;
 - 使用new String(“”)拼接 ： String s5 = new String(“fo”)+new String(“ur”);
 
-![è¿éåå¾çæè¿°](assets/20180104172533536.png) 
+![](assets/20180104172533536.png) 
 
 **解析**
 Java 会确保一个字符串常量只有一个拷贝。

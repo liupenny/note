@@ -15,7 +15,6 @@ tags:
 
 - set,map叫做 容器类
 
-  ![]()
 
 常见操作：
 - insert

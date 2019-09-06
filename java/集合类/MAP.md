@@ -131,7 +131,7 @@ keySet()
 
 ## 2. HashMap 的设计和实现细节
 
-![1543476880903](../../../../%E8%87%AA%E5%B7%B1%E5%AD%A6%E4%B9%A0/%E7%AC%94%E8%AE%B0/java/%E9%9B%86%E5%90%88%E7%B1%BB/assets/1543476880903.png)
+![1543476880903](/assets/1543476880903.png)
 
 - 理解 Map 相关类似整体结构，尤其是有序数据结构的一些要点：HashMap 内部实现基本点分析
 
@@ -714,7 +714,7 @@ counterCell这个类需要防止“伪共享”：缓存系统中是以缓存行
 
 # 8. JAVA8-HashMap
 
-![20170920,ä"ç½ä¸è½¬äºä¸å¼ å¾ï¼æ®è¯´æ¥èªç¾å¢ï¼ä¾µå ](assets/9839d16b2f8d488f3400dda385f993e1) 
+![](assets/9839d16b2f8d488f3400dda385f993e1) 
 
 ## 概述
 
@@ -999,7 +999,7 @@ return newTab;
 
 1. 没有进行扩容时：
 
-![è¿éåå¾çæè¿°](assets/20170305150541022.png) 
+![](assets/20170305150541022.png) 
 
 可以看到两个Hash值所计算的坐标是相同的。
 
@@ -1007,11 +1007,11 @@ return newTab;
 
    扩容后应该的坐标为：第二个坐标点增加了 oldCap 个长度。
 
-![è¿éåå¾çæè¿°](assets/20170305150656915.png) 
+![](assets/20170305150656915.png) 
 
 ​	源码中为e.hash & oldCap 所计算出的结果：
 
-![è¿éåå¾çæè¿°](assets/20170305151253346.png) 
+![](assets/20170305151253346.png) 
 
 ​		即 e.hash & oldCap == 0 是，原来的坐标没有发生变化，e.hash & oldCap != 0 在原来坐标的前提下增加 oldCap 。
 
@@ -1216,11 +1216,11 @@ static int indexFor(int h, int length) {
 
 但还会有散列冲突，以下就是**“扰动函数”**
 
-![img](../../../../%E8%87%AA%E5%B7%B1%E5%AD%A6%E4%B9%A0/%E7%AC%94%E8%AE%B0/java/%E9%9B%86%E5%90%88%E7%B1%BB/assets/4acf898694b8fb53498542dc0c5f765a_hd-1544882152844.png) 
+![img](/assets/4acf898694b8fb53498542dc0c5f765a_hd-1544882152844.png) 
 
 右移16位，正好是32bit的一般，自己的高半区与低半区异或，就是为了混合哈希值的高位和地位，增加低位的随机性。并且混合后的值也变相保持了高位的特征。
 
- Peter Lawley在文章《An introduction to optimising a hashing strategy》中做实验![img](../../../../%E8%87%AA%E5%B7%B1%E5%AD%A6%E4%B9%A0/%E7%AC%94%E8%AE%B0/java/%E9%9B%86%E5%90%88%E7%B1%BB/assets/e790d0e17917824d49cd0fe71d041d86_hd.png) 
+ Peter Lawley在文章《An introduction to optimising a hashing strategy》中做实验![img](/assets/e790d0e17917824d49cd0fe71d041d86_hd.png) 
 
 ## 与HashTable的区别
 
@@ -1236,8 +1236,6 @@ static int indexFor(int h, int length) {
 ## 1. 实现原理
 
 ConcurrentHashMap使用分段锁技术，将数据分成一段一段的存储，然后给每一段数据配一把锁，当一个线程占用锁访问其中一个段数据的时候，其他段的数据也能被其他线程访问，能够实现真正的并发访问。：
-
- 
 
 ![img](assets/154925_NLV0_2243330.png)
 
@@ -1837,8 +1835,6 @@ public LinkedHashMap(Map<? extends K, ? extends V> m) {
       }
   }
   ```
-
-  
 
 - containsValue
 

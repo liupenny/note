@@ -756,7 +756,7 @@ public static void readFile() throws IOException {
 
 # 其他类
 
-![1533729199541](assets/1533729199541.png)
+![1533729199541](./assets/1533729199541.png)
 
 ## DataInputStream
 
